@@ -2,6 +2,8 @@ package com.enginekt.platform.dom.renderer
 
 import com.enginekt.RenderingContext
 import com.enginekt.platform.dom.DomRenderingContext
+import com.enginekt.platform.dom.anchor
+import com.enginekt.platform.dom.image
 import com.enginekt.renderer.SpriteRenderer
 import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLElement
@@ -13,14 +15,18 @@ class DomSpriteRenderer : SpriteRenderer(), DomInstanceDelegate {
 
     init {
         addDisposable(OnPropertyChange.add({ event ->
-            if (event.name == SpriteRenderer.TEXTURE) {
-                _updateTexture()
+            when (event.name) {
+                TEXTURE -> _updateTexture()
+                ANCHOR -> _updateAnchor()
             }
         }))
     }
 
     override fun initDomElement(): HTMLElement {
-        return document.createElement("div") as HTMLDivElement
+        val element = document.createElement("div") as HTMLDivElement
+        _updateTexture()
+        _updateAnchor()
+        return element
     }
 
     override fun updateTransform() {
@@ -32,8 +38,11 @@ class DomSpriteRenderer : SpriteRenderer(), DomInstanceDelegate {
     }
 
     fun _updateTexture() {
-        val element = _domInstance.element
-        
+        _domInstance.edit { it.image(texture) }
+    }
+
+    fun _updateAnchor() {
+        _domInstance.edit({ it.anchor(anchor) })
     }
 
 }

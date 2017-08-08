@@ -7,6 +7,7 @@ buildscript {
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
+
 }
 
 allprojects {
@@ -20,11 +21,15 @@ subprojects {
     }
 }
 
-task copyJs(type: Copy) {
-    from 'web/build/classes/libs/kotlin.js'
-    from 'web/build/classes/main/KT-web.js'
-    from 'web/build/classes/main/KT-web.js.map'
-    from 'dom/build/classes/main/KT-dom.js'
-    from 'dom/build/classes/main/KT-dom.js.map'
-    into 'dist'
+task copyJs {
+    doLast {
+        copy {
+            from 'web/build/classes/libs/kotlin.js'
+            from 'web/build/classes/main/KT-web.js'
+            from 'web/build/classes/main/KT-web.js.map'
+            from 'dom/build/classes/main/KT-dom.js'
+            from 'dom/build/classes/main/KT-dom.js.map'
+            into 'dist'
+        }
+    }
 }

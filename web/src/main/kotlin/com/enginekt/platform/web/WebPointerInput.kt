@@ -44,7 +44,7 @@ class WebPointerInput(val app: Application, root: HTMLDivElement) : PointerInput
         _updateOffsetAndBounding()
         app.view.OnResize.add(this::_updateOffsetAndBounding)
 
-        val isSupportTouch = js("('ontouchstart' in window) || window.DocumentTouch && document instanceof window.DocumentTouch") as Boolean
+        val isSupportTouch = js("!!(('ontouchstart' in window) || window.DocumentTouch && document instanceof window.DocumentTouch)") as Boolean
         if (isSupportTouch) {
             hook.addEventListener("touchstart", this::_handleDOMEvent, false)
             hook.addEventListener("touchmove", this::_handleDOMEvent, false)

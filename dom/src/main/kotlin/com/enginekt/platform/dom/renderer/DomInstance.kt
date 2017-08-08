@@ -2,11 +2,10 @@ package com.enginekt.platform.dom.renderer
 
 import com.enginekt.Component
 import com.enginekt.Context
-import com.enginekt.RenderingContext
 import com.enginekt.core.RendererBase
 import com.enginekt.platform.dom.DomRenderingContext
 import com.enginekt.platform.dom.css
-import com.enginekt.platform.dom.transform
+import com.enginekt.platform.dom.matrix
 import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLElement
 import kotlin.browser.document
@@ -26,6 +25,7 @@ class DomInstance(val renderer: RendererBase, delegate: DomInstanceDelegate) : D
 
     private var _sortingLayerDirty = true
     private var _sortingOrderDirty = true
+    private val _elementEdits = mutableListOf<(HTMLElement) -> Unit>()
 
     init {
         renderer.OnInit.add(this::onInit)
@@ -57,11 +57,18 @@ class DomInstance(val renderer: RendererBase, delegate: DomInstanceDelegate) : D
     }
 
     fun updateTransform() {
-        logger.debug(DomInstance::class.simpleName!!, "updateTransform")
-        wrap.transform(renderer.entity.transform.worldMatrix)
+        wrap.matrix(renderer.entity.transform.worldMatrix)
+    }
+
+    fun edit(editor: (HTMLElement) -> Unit) {
+        _elementEdits.add(editor)
     }
 
     fun render(context: DomRenderingContext) {
+        if (!_elementEdits.isEmpty()) {
+            _elementEdits.forEach { it(element) }
+            _elementEdits.clear()
+        }
         if (_sortingOrderDirty) {
             _sortingOrderDirty = false
             wrap.style.zIndex = renderer.sortingOrder.toString()

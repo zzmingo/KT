@@ -1,6 +1,7 @@
 package com.enginekt.platform.dom
 
 import com.enginekt.KT
+import com.enginekt.Texture
 import com.enginekt.renderer.SpriteRenderer
 import org.w3c.dom.HTMLDivElement
 import kotlin.browser.document
@@ -15,8 +16,11 @@ fun main(args: Array<String>) {
         app.stage.viewport.center.set(window.innerWidth/2, window.innerHeight/2)
         app.stage.viewport.size.set(window.innerWidth, window.innerHeight)
         val entity = KT.entity()
-        entity.transform.pivot.set(50, 50)
-        entity.add(SpriteRenderer::class)
-        console.log(entity)
+
+        val sprite = entity.add(SpriteRenderer::class)
+        app.fs.texture("kotlin_250x250.png", {
+            console.log(it)
+            sprite.texture = it
+        })
     }
 }

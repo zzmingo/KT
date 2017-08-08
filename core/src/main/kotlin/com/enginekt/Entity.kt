@@ -47,12 +47,13 @@ abstract class Entity constructor(val context: Context) : CompositeDisposableBas
         children.remove(child)
     }
 
-    fun <T : Component> add(clazz: KClass<T>) {
+    fun <T : Component> add(clazz: KClass<T>): T {
         val component = this.context.coreFactory.create(clazz)
         add(component)
         if (inited) {
             component.init()
         }
+        return component
     }
 
     @Suppress("UNCHECKED_CAST")

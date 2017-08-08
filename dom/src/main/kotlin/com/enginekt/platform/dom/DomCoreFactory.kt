@@ -20,6 +20,7 @@ class DomCoreFactory : CoreFactory {
     @Suppress("UNUSED_VARIABLE")
     override fun <T : Component> create(clazz: KClass<T>): T {
         if (clazz === SpriteRenderer::class) {
+            KT.app.logger.print("create")
             return DomSpriteRenderer().unsafeCast<T>()
         } else {
             val JSClass = clazz.js.asDynamic()
