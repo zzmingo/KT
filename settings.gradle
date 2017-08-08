@@ -1,0 +1,8 @@
+rootProject.name = 'KT'
+include ':KT-core'
+include ':KT-web'
+include ':KT-dom'
+
+project(':KT-core').projectDir = "$rootDir/core" as File
+project(':KT-web').projectDir = "$rootDir/web" as File
+project(':KT-dom').projectDir = "$rootDir/dom" as File

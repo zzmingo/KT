@@ -1,0 +1,15 @@
+apply plugin: 'kotlin-platform-js'
+
+dependencies {
+    compile project(':KT-core')
+    compile project(':KT-web')
+    compile "org.jetbrains.kotlin:kotlin-stdlib-js:$kotlin_version"
+}
+
+compileKotlin2Js {
+    kotlinOptions {
+        moduleKind = "umd"
+        outputFile = "${buildDir}/classes/main/KT-dom.js"
+        sourceMap = true
+    }
+}

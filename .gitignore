@@ -1,0 +1,8 @@
+.idea
+*.iml
+*.ipr
+out/
+build/
+.gradle
+dist
+gradle/wrapper/gradle-3.5.1-bin.zip
