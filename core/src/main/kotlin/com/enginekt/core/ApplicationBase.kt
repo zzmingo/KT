@@ -9,7 +9,6 @@ import com.enginekt.input.InputProcessor
 import com.enginekt.schedule.Scheduler
 
 abstract class ApplicationBase(
-        override val orientation: Orientation,
         override val resolution: Double
 ) : CompositeDisposableBase(), Application {
 
@@ -41,7 +40,7 @@ abstract class ApplicationBase(
         get() = _stepId
     private var _stepId: Int = 1
 
-    private var _lastTime: Int = 0
+    private var _lastTime: Long = 0
 
     private var input: Input<*>? = null
     private var inputProcess: InputProcessor<*>? = null
@@ -94,9 +93,7 @@ abstract class ApplicationBase(
         time.update(currentMillis() - _lastTime)
         OnStepBegin.invoke(this)
         stage.updateStage()
-        renderingContext.clear()
-        stage.renderStage(renderingContext)
-        renderingContext.flush()
+        internalRender()
         scheduler.update(time.delta)
         OnStepEnd.invoke(this)
         KT.exitLoop()
@@ -114,5 +111,11 @@ abstract class ApplicationBase(
         input.OnInput.add { event -> processor.processInputEvent(this, event) }
     }
 
-    abstract fun currentMillis(): Int
+    abstract fun currentMillis(): Long
+
+    open protected fun internalRender() {
+        renderingContext.clear()
+        stage.renderStage(renderingContext)
+        renderingContext.flush()
+    }
 }

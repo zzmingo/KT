@@ -2,10 +2,10 @@ package com.enginekt.core
 
 import kotlin.reflect.KClass
 import com.enginekt.Asset
-import com.enginekt.FSCallback
 import com.enginekt.FileSystem
 import com.enginekt.base.dispose.Disposable
 import com.enginekt.base.event.Event
+import com.enginekt.base.utils.Callback
 
 abstract class FileSystemBase(var autoRelease: Boolean = false) : FileSystem {
 
@@ -18,10 +18,10 @@ abstract class FileSystemBase(var autoRelease: Boolean = false) : FileSystem {
     private var disposed: Boolean = false
 
     @Suppress("UNCHECKED_CAST")
-    override fun <T : Asset> retain(path: String, clazz: KClass<T>, onComplete: FSCallback<T>) {
+    override fun <T : Asset> retain(path: String, clazz: KClass<T>, callback: Callback<T>) {
         val asset = _cache[path]
         if (asset != null) {
-            return onComplete(asset as T)
+            return callback.success(asset as T)
         }
         if (_loadingMap.contains(path)) {
             _increase(path, _loadingMap)
@@ -29,18 +29,23 @@ abstract class FileSystemBase(var autoRelease: Boolean = false) : FileSystem {
             listener = OnLoad.add { asset: Asset ->
                 listener?.dispose()
                 _decrease(path, _loadingMap)
-                onComplete(asset as T)
+                callback.success(asset as T)
             }
             return
         }
         _increase(path, _loadingMap)
-        load(path, clazz, { asset: T ->
-            if (!disposed) {
-                _cache[asset.path] = asset
-                _increase(path, _referenceMap)
-                _decrease(path, _loadingMap)
-                onComplete(asset)
-                OnLoad.invoke(asset)
+        load(path, clazz, object: Callback<T> {
+            override fun success(asset: T) {
+                if (!disposed) {
+                    _cache[asset.path] = asset
+                    _increase(path, _referenceMap)
+                    _decrease(path, _loadingMap)
+                    callback.success(asset)
+                    OnLoad.invoke(asset)
+                }
+            }
+            override fun error(error: Throwable) {
+                callback.error(error)
             }
         })
     }
@@ -71,7 +76,7 @@ abstract class FileSystemBase(var autoRelease: Boolean = false) : FileSystem {
         _cache.forEach { it.value.dispose() }
     }
 
-    protected abstract fun <T : Asset> load(path: String, clazz: KClass<T>, onComplete: FSCallback<T>)
+    protected abstract fun <T : Asset> load(path: String, clazz: KClass<T>, callback: Callback<T>)
 
     private fun _increase(key: String, map: MutableMap<String, Int>) {
         if (!map.containsKey(key)) {

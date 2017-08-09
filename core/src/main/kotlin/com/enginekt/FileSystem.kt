@@ -1,17 +1,16 @@
 package com.enginekt
 
+import com.enginekt.base.utils.Callback
 import com.enginekt.base.dispose.Disposable
 import kotlin.reflect.KClass
 
-typealias FSCallback<T> = (T) -> Unit
-
 interface FileSystem : Disposable {
 
-    fun <T : Asset> retain(path: String, clazz: KClass<T>, onComplete: FSCallback<T>)
+    fun <T : Asset> retain(path: String, clazz: KClass<T>, callback: Callback<T>)
     fun release(asset: Asset)
 
-    fun texture(path: String, onComplete: FSCallback<Texture>) {
-        retain(path, Texture::class, onComplete)
+    fun texture(path: String, callback: Callback<Texture>) {
+        retain(path, Texture::class, callback)
     }
 
 }

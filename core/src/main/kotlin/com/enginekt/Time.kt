@@ -2,11 +2,11 @@ package com.enginekt
 
 class Time {
 
-    var now: Int = 0
+    var now: Long = 0
         get() = field
         private set(value) { field = value }
 
-    var delta: Int = 0
+    var delta: Long = 0
         get() = field
         private set(value) { field = value }
 
@@ -15,7 +15,7 @@ class Time {
         delta = 0
     }
 
-    fun update(delta: Int) {
+    fun update(delta: Long) {
         this.delta = delta
         this.now += delta
     }

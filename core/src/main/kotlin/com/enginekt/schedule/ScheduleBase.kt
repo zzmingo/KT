@@ -1,6 +1,6 @@
 package com.enginekt.schedule
 
-typealias Task = () -> Unit
+import com.enginekt.base.Task
 
 abstract class ScheduleBase(
         override val id: String,
@@ -42,6 +42,6 @@ abstract class ScheduleBase(
         }
     }
 
-    internal abstract fun update(deltaTime: Int)
+    internal abstract fun update(deltaTime: Long)
 
 }

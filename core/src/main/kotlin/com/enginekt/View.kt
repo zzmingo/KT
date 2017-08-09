@@ -14,8 +14,3 @@ interface View : Disposable {
     val OnResize: Event<Any>
 
 }
-
-enum class Orientation {
-    PORTRAIT,
-    LANDSCAPE
-}

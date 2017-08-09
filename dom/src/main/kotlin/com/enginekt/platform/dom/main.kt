@@ -2,6 +2,7 @@ package com.enginekt.platform.dom
 
 import com.enginekt.KT
 import com.enginekt.Texture
+import com.enginekt.base.utils.Callback
 import com.enginekt.renderer.SpriteRenderer
 import org.w3c.dom.HTMLDivElement
 import kotlin.browser.document
@@ -18,9 +19,10 @@ fun main(args: Array<String>) {
         val entity = KT.entity()
 
         val sprite = entity.add(SpriteRenderer::class)
-        app.fs.texture("kotlin_250x250.png", {
-            console.log(it)
-            sprite.texture = it
+        app.fs.texture("kotlin_250x250.png", object: Callback<Texture> {
+            override fun success(result: Texture) {
+                sprite.texture = result
+            }
         })
     }
 }

@@ -1,5 +1,6 @@
 package com.enginekt.schedule
 
+import com.enginekt.base.Task
 import com.enginekt.base.utils.SafeList
 
 class Scheduler {
@@ -40,7 +41,7 @@ class Scheduler {
         return add(StepSchedule(_generateId(), steps, task))
     }
 
-    internal fun update(deltaTime: Int) {
+    internal fun update(deltaTime: Long) {
         if (_schedules.size == 0) {
             return
         }

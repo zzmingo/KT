@@ -1,6 +1,5 @@
 package com.enginekt.platform.web
 
-import com.enginekt.Orientation
 import com.enginekt.core.ApplicationBase
 import com.enginekt.input.pointer.DefaultPointerInputProcessor
 import org.w3c.dom.HTMLDivElement
@@ -9,9 +8,8 @@ import kotlin.js.Date
 
 abstract class WebApplication(
         val root: HTMLDivElement,
-        orientation: Orientation,
         resolution: Double
-) : ApplicationBase(orientation, resolution) {
+) : ApplicationBase(resolution) {
 
     final override val logger: WebLogger = WebLogger()
     final override val math: WebMathLibrary = WebMathLibrary()
@@ -22,8 +20,8 @@ abstract class WebApplication(
 
     private var _animationFrameId: Int = -1
 
-    override fun currentMillis(): Int {
-        return Date().getTime().toInt()
+    override fun currentMillis(): Long {
+        return Date().getTime().toLong()
     }
 
     override fun start() {

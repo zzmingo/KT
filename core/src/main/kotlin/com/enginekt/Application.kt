@@ -35,7 +35,6 @@ interface Application : Context, Disposable {
     val OnStepBegin: Event<Any>
     val OnStepEnd: Event<Any>
 
-    val orientation: Orientation
     val resolution: Double
 
     val started: Boolean
