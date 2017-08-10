@@ -1,10 +1,12 @@
 rootProject.name = 'KT'
 include ':KT-core'
+include ':KT-core-jvm'
 include ':KT-web'
 include ':KT-dom'
 //include ':KT-android'
 
 project(':KT-core').projectDir = "$rootDir/core" as File
+project(':KT-core-jvm').projectDir = "$rootDir/core-jvm" as File
 project(':KT-web').projectDir = "$rootDir/web" as File
 project(':KT-dom').projectDir = "$rootDir/dom" as File
 //project(':KT-android').projectDir = "$rootDir/android" as File
