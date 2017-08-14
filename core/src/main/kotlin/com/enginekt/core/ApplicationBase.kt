@@ -48,6 +48,12 @@ abstract class ApplicationBase(
     fun initialize() {
         stage.initialize()
         renderingContext.initialize()
+        KT.onAppCreate(this)
+    }
+
+    override fun dispose() {
+        super.dispose()
+        KT.onAppDispose(this)
     }
 
     override fun start() {
