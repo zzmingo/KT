@@ -14,8 +14,8 @@ class DomSpriteRenderer : SpriteRenderer(), DomInstanceDelegate {
     private val _domInstance = DomInstance(this, this)
 
     init {
-        addDisposable(OnPropertyChange.add({ event ->
-            when (event.name) {
+        addDisposable(OnPropertyChange.add({ (name) ->
+            when (name) {
                 TEXTURE -> _updateTexture()
                 ANCHOR -> _updateAnchor()
             }

@@ -12,6 +12,13 @@ fun hex2string(hex: Int): String {
     return "#$hexStr"
 }
 
+fun colorMultiply(a: Int, b: Int): Int {
+    val r = (((a shr 16) and 0xFF) / 255.0) * (((b shr 16) and 0xFF) / 255.0)
+    val g = (((a shr 8) and 0xFF) / 255.0) * (((b shr 8) and 0xFF) / 255.0)
+    val b = (((a and 0xFF) / 255.0) * ((b and 0xFF) / 255.0))
+    return ((r * 255).toInt() shl 16) + ((g * 255).toInt() shl 8) + (b * 255).toInt()
+}
+
 fun toCSSMatrix(matrix: Matrix3): String {
     val m = matrix
     return "matrix(${m.a}, ${m.b}, ${m.c}, ${m.d}, ${m.tx}, ${m.ty})"
@@ -58,6 +65,10 @@ fun HTMLElement.image(texture: Texture?) {
         css("background-image", "url(${(texture as DomTexture).url})")
         css("background-size", "100% 100%")
     }
+}
+
+fun HTMLElement.text(text: String?) {
+    this.innerText = text ?: ""
 }
 
 fun HTMLElement.css(styles: Map<String, Any>) {
