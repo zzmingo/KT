@@ -2,13 +2,15 @@ package com.enginekt
 
 import com.enginekt.base.DEG_TO_RAD
 import com.enginekt.base.math.Matrix3
+import com.enginekt.base.observable.Observable
 import com.enginekt.base.observable.ObservableVector2
+import com.enginekt.base.observable.observable
 
-class Transform {
+class Transform : Observable {
 
     val position = ObservableVector2()
     val scale = ObservableVector2(1.0, 1.0)
-    val rotation = 0.0
+    val rotation: Double by observable(0.0)
     val pivot = ObservableVector2()
     val skew = ObservableVector2()
 
@@ -18,6 +20,9 @@ class Transform {
 
     init {
         this.position.OnChange.add(this::onChange)
+        this.scale.OnChange.add(this::onChange)
+        this.pivot.OnChange.add(this::onChange)
+        this.skew.OnChange.add(this::onChange)
     }
 
     fun updateWorldMatrix(parent: Transform? = null, force: Boolean = false) {
@@ -67,8 +72,10 @@ class Transform {
     }
 
     private fun onChange() {
-        this.dirty = true
+        dirty = true
     }
 
-
+    override fun onPropertyChange(name: String, value: Any?, old: Any?) {
+        dirty = true
+    }
 }
